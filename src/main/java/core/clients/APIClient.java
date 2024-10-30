@@ -20,7 +20,7 @@ public class APIClient {
         try (InputStream input =
                      getClass().getClassLoader().getResourceAsStream(configFileName)) {
             if (input == null) {
-                throw new IllegalStateException("Configuration file not found!: "
+                throw new IllegalStateException("Configuration file not found: "
                         + configFileName);
             }
             properties.load(input);
