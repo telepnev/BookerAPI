@@ -67,7 +67,7 @@ public class APIClient {
     public Response getBookingById(int id) {
         return getRequestSpec()
                 .when()
-                .get(ApiEndpoints.BOOKINGBYID.getPath() + id)       // Enum для ендпоинта booking
+                .get(ApiEndpoints.BOOKING.getPath() + "/" + id)       // Enum для ендпоинта booking
                 .then()
                 .statusCode(200)
                 .extract().response();

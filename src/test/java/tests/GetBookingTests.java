@@ -28,13 +28,12 @@ public class GetBookingTests {
     public void testGetBooking() throws JsonProcessingException {
         Response response = apiClient.getBooking();
 
-        assertThat(response.getStatusCode()).isEqualTo(201);
-
         //десериализуем тело ответа в список обьектов
         String responseBody = response.getBody().asString();
-        List<Booking> bookings = objectMapper.readValue(responseBody, new TypeReference<List<Booking>>() {
-        });
+        List<Booking> bookings = objectMapper.readValue(responseBody,
+                new TypeReference<List<Booking>>() {});
 
+        assertThat(response.getStatusCode()).isEqualTo(200);
         assertThat(bookings).isNotEmpty();
 
         for (Booking booking : bookings) {

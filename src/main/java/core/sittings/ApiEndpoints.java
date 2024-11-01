@@ -2,8 +2,7 @@ package core.sittings;
 
 public enum ApiEndpoints {
     PING("/ping"),
-    BOOKING("/booking"),
-    BOOKINGBYID("/booking/");
+    BOOKING("/booking");
 
     private final String path;
 
