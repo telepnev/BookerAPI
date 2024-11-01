@@ -27,20 +27,15 @@ public class GetBookingByIdTests {
         //десериализуем тело ответа в список обьектов
         String responseBody = response.getBody().asString();
         BookingById bookingsById = objectMapper.readValue(responseBody, BookingById.class);
-        assertThat(response.getStatusCode()).isEqualTo(200);
 
+        assertThat(response.getStatusCode()).isEqualTo(200);
         // пока такой тест, дороботать после создания Booking
         assertThat(bookingsById.getFirstname()).isNotEmpty();
         assertThat(bookingsById.getLastname()).isNotEmpty();
         assertThat(bookingsById.getTotalprice()).isNotNull();
         assertThat(bookingsById.getDepositpaid()).isNotNull();
         assertThat(bookingsById.getBookingdates()).isNotNull();
-
-        if (bookingsById.getAdditionalneeds() != null) {
-            assertThat(bookingsById.getAdditionalneeds()).isNotNull();
-        } else {
-            System.out.println("The field is not present == Additionalneeds");
-        }
+        assertThat(bookingsById.getAdditionalneeds()).isNotEmpty();
 
     }
 }

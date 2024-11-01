@@ -11,9 +11,6 @@ public class BookingById {
     private Bookingdates bookingdates;
     private String additionalneeds;
 
-    public BookingById() {
-    }
-
     @JsonCreator
     public BookingById(
             @JsonProperty("firstname") String firstname,

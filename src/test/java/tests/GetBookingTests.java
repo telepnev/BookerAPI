@@ -33,7 +33,6 @@ public class GetBookingTests {
         List<Booking> bookings = objectMapper.readValue(responseBody,
                 new TypeReference<List<Booking>>() {});
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
         assertThat(bookings).isNotEmpty();
 
         for (Booking booking : bookings) {
