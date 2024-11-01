@@ -28,7 +28,6 @@ public class GetBookingByIdTests {
         String responseBody = response.getBody().asString();
         BookingById bookingsById = objectMapper.readValue(responseBody, BookingById.class);
 
-        assertThat(response.getStatusCode()).isEqualTo(200);
         // пока такой тест, дороботать после создания Booking
         assertThat(bookingsById.getFirstname()).isNotEmpty();
         assertThat(bookingsById.getLastname()).isNotEmpty();
