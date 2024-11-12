@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Bookingdates {
-    public String checkin;
-    public String checkout;
+public class CreatedBooking {
+    public Integer bookingid;
+    public Booking booking;
 }

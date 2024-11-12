@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
-import core.models.Booking;
+import core.models.CreatedBooking;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,13 +30,14 @@ public class GetBookingTests {
 
         //десериализуем тело ответа в список обьектов
         String responseBody = response.getBody().asString();
-        List<Booking> bookings = objectMapper.readValue(responseBody,
-                new TypeReference<List<Booking>>() {});
+        List<CreatedBooking> bookings = objectMapper.readValue(responseBody,
+                new TypeReference<List<CreatedBooking>>() {
+                });
 
         assertThat(bookings).isNotEmpty();
         assertThat(response.statusCode()).isEqualTo(200);
 
-        for (Booking booking : bookings) {
+        for (CreatedBooking booking : bookings) {
             assertThat(booking.getBookingid()).isGreaterThan(0);
         }
 

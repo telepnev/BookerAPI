@@ -1,22 +1,19 @@
 package core.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Booking {
-    private int bookingid;
-
-    // конструктор
-    @JsonCreator
-    public Booking(@JsonProperty("bookingid") int bookingid) {
-        this.bookingid = bookingid;
-    }
-
-    public int getBookingid() {
-        return bookingid;
-    }
-
-    public void setBookingid(int bookingid) {
-        this.bookingid = bookingid;
-    }
+    public String firstname;
+    public String lastname;
+    public Integer totalprice;
+    public Boolean depositpaid;
+    public Bookingdates bookingdates;
+    public String additionalneeds;
 }

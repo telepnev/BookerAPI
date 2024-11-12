@@ -3,7 +3,7 @@ package tests;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
-import core.models.BookingById;
+import core.models.Booking;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class GetBookingByIdTests {
         Response response = apiClient.getBookingById(value);
         //десериализуем тело ответа в список обьектов
         String responseBody = response.getBody().asString();
-        BookingById bookingsById = objectMapper.readValue(responseBody, BookingById.class);
+        Booking bookingsById = objectMapper.readValue(responseBody, Booking.class);
 
         // пока такой тест, дороботать после создания Booking
         assertThat(bookingsById.getFirstname()).isNotEmpty();
@@ -39,6 +39,7 @@ public class GetBookingByIdTests {
         assertThat(bookingsById.getTotalprice()).isNotNull();
         assertThat(bookingsById.getDepositpaid()).isNotNull();
         assertThat(bookingsById.getBookingdates()).isNotNull();
+        assertThat(bookingsById.getAdditionalneeds()).isNotEmpty();
         assertThat(bookingsById.getAdditionalneeds()).isNotEmpty();
 
     }

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
-import core.models.Booking;
+import core.models.CreatedBooking;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,9 +34,11 @@ public class DeleteBookingById {
 
         Response response = apiClient.getBooking();
         String responseBody = response.getBody().asString();
-        List<Booking> bookings = objectMapper.readValue(responseBody,
-                new TypeReference<List<Booking>>() {});
-        for (Booking booking : bookings) {
+        List<CreatedBooking> bookings = objectMapper.readValue(responseBody,
+                new TypeReference<List<CreatedBooking>>() {
+                });
+
+        for (CreatedBooking booking : bookings) {
             listBookingId.add(booking.getBookingid());
         }
 
@@ -48,7 +50,7 @@ public class DeleteBookingById {
             assertThat(deleteResponse.getStatusCode()).isEqualTo(201);
             assertThat(deleteResponse.asString()).isEqualTo("Created");
         } else {
-            System.out.format("Id %d not found",geRandomBookingId);
+            System.out.format("Id %d not found", geRandomBookingId);
         }
 
         // Checking not found booking by ID
