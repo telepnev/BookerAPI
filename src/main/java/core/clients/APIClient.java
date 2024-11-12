@@ -76,21 +76,19 @@ public class APIClient {
         };
     }
 
-    // Get запрос на endpoint /ping
     public Response ping() {
         return getRequestSpec()
                 .when()
-                .get(ApiEndpoints.PING.getPath())       // Enum для ендпоинта ping
+                .get(ApiEndpoints.PING.getPath())
                 .then()
                 .statusCode(201)
                 .extract().response();
     }
 
-    // Get запрос на endpoint /booking
     public Response getBooking() {
         return getRequestSpec()
                 .when()
-                .get(ApiEndpoints.BOOKING.getPath())       // Enum для ендпоинта booking
+                .get(ApiEndpoints.BOOKING.getPath())
                 .then()
                 .extract().response();
     }
@@ -98,7 +96,7 @@ public class APIClient {
     public Response getBookingById(int id) {
         return getRequestSpec()
                 .when()
-                .get(ApiEndpoints.BOOKING.getPath() + "/" + id)       // Enum для ендпоинта booking
+                .get(ApiEndpoints.BOOKING.getPath() + "/" + id)
                 .then()
                 .extract().response();
     }
