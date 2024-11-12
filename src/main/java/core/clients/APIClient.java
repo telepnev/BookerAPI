@@ -2,7 +2,11 @@ package core.clients;
 
 import core.sittings.ApiEndpoints;
 import io.restassured.RestAssured;
+import io.restassured.filter.Filter;
+import io.restassured.filter.FilterContext;
 import io.restassured.response.Response;
+import io.restassured.specification.FilterableRequestSpecification;
+import io.restassured.specification.FilterableResponseSpecification;
 import io.restassured.specification.RequestSpecification;
 
 import java.io.IOException;
@@ -11,6 +15,7 @@ import java.util.Properties;
 
 public class APIClient {
     final private String baseUrl;
+    private String token;
 
     public APIClient() {
         this.baseUrl = determineBaseUrl();
@@ -41,7 +46,34 @@ public class APIClient {
         return RestAssured.given()
                 .baseUri(baseUrl)
                 .header("Content-Type", "application/json")
-                .header("Accept", "application/json");
+                .header("Accept", "application/json")
+                .filter(addAuthFilter());
+    }
+
+    // Получение token
+    public void createToken(String username, String password) {
+        String requestBody = String.format("{ \"username\": \"%s\",\"password\": \"%s\" }", username,  password);
+
+        Response response = getRequestSpec()
+                .body(requestBody)
+                .when()
+                .post(ApiEndpoints.AUTH.getPath())
+                .then()
+                .statusCode(200)
+                .extract().response();
+
+        // измлекаем токен из ответа
+        token = response.jsonPath().getString("token");
+    }
+
+    private Filter addAuthFilter() {
+        return (FilterableRequestSpecification requestSpec,
+                FilterableResponseSpecification responseSpec, FilterContext ctx) -> {
+            if (token != null) {
+                requestSpec.header("Cookie", "token=" + token);
+            }
+            return ctx.next(requestSpec, responseSpec); // Продолжает выполнение
+        };
     }
 
     // Get запрос на endpoint /ping
@@ -60,7 +92,6 @@ public class APIClient {
                 .when()
                 .get(ApiEndpoints.BOOKING.getPath())       // Enum для ендпоинта booking
                 .then()
-                .statusCode(200)
                 .extract().response();
     }
 
@@ -69,7 +100,16 @@ public class APIClient {
                 .when()
                 .get(ApiEndpoints.BOOKING.getPath() + "/" + id)       // Enum для ендпоинта booking
                 .then()
-                .statusCode(200)
+                .extract().response();
+    }
+
+    public Response deleteBooking(int bookingId) {
+        return getRequestSpec()
+                .pathParam("id", bookingId)
+                .when()
+                .delete(ApiEndpoints.BOOKING.getPath() +"/{id}")
+                .then()
+                .log().all()
                 .extract().response();
     }
 }

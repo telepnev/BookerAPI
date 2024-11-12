@@ -8,6 +8,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GetBookingByIdTests {
@@ -23,7 +25,10 @@ public class GetBookingByIdTests {
 
     @Test
     public void testGetBookingByIdNotEmpty() throws JsonProcessingException {
-        Response response = apiClient.getBookingById(3);
+        Random rand = new Random();
+        int value = rand.nextInt(100);
+
+        Response response = apiClient.getBookingById(value);
         //десериализуем тело ответа в список обьектов
         String responseBody = response.getBody().asString();
         BookingById bookingsById = objectMapper.readValue(responseBody, BookingById.class);

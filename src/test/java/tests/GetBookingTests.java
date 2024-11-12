@@ -34,6 +34,7 @@ public class GetBookingTests {
                 new TypeReference<List<Booking>>() {});
 
         assertThat(bookings).isNotEmpty();
+        assertThat(response.statusCode()).isEqualTo(200);
 
         for (Booking booking : bookings) {
             assertThat(booking.getBookingid()).isGreaterThan(0);
