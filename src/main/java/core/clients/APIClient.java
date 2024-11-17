@@ -1,5 +1,6 @@
 package core.clients;
 
+import core.models.NewBooking;
 import core.sittings.ApiEndpoints;
 import io.restassured.RestAssured;
 import io.restassured.filter.Filter;
@@ -52,7 +53,7 @@ public class APIClient {
 
     // Получение token
     public void createToken(String username, String password) {
-        String requestBody = String.format("{ \"username\": \"%s\",\"password\": \"%s\" }", username,  password);
+        String requestBody = String.format("{ \"username\": \"%s\",\"password\": \"%s\" }", username, password);
 
         Response response = getRequestSpec()
                 .body(requestBody)
@@ -98,6 +99,7 @@ public class APIClient {
                 .when()
                 .get(ApiEndpoints.BOOKING.getPath() + "/" + id)
                 .then()
+                .log().body()
                 .extract().response();
     }
 
@@ -105,14 +107,14 @@ public class APIClient {
         return getRequestSpec()
                 .pathParam("id", bookingId)
                 .when()
-                .delete(ApiEndpoints.BOOKING.getPath() +"/{id}")
+                .delete(ApiEndpoints.BOOKING.getPath() + "/{id}")
                 .then()
                 .log().all()
                 .extract().response();
     }
 
     public Response createBooking(String newBooking) {
-        return  getRequestSpec()
+        return getRequestSpec()
                 .body(newBooking)
                 .log().body()
                 .when()
@@ -120,5 +122,53 @@ public class APIClient {
                 .then()
                 .log().body()
                 .extract().response();
+    }
+
+    public Response updateBooking(int bookingId, NewBooking updateBooking) {
+        return getRequestSpec()
+                .pathParam("id", bookingId)
+                .body(updateBooking)
+                .log().body()
+                .when()
+                .put(ApiEndpoints.BOOKING.getPath() + "/{id}")
+                .then()
+                .log().body()
+                .extract().response();
+    }
+
+    public Response partialUpdateBooking(int bookingId, NewBooking updateBooking) {
+        return getRequestSpec()
+                .pathParam("id", bookingId)
+                .body(updateBooking)
+                .log().body()
+                .when()
+                .patch(ApiEndpoints.BOOKING.getPath() + "/{id}")
+                .then()
+                .log().body()
+                .extract().response();
+    }
+
+    public Response searchByNameAndLastName(String name, String lastname) {
+        return getRequestSpec()
+                .queryParam("firstname", name)
+                .queryParam("lastname", lastname)
+                .log().body()
+                .get(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
+                .extract().response();
+
+    }
+
+    public Response searchByBookingDates(String checkin, String checkout) {
+        return getRequestSpec()
+                .queryParam("checkin", checkin)
+                .queryParam("checkout", checkout)
+                .log().body()
+                .get(ApiEndpoints.BOOKING.getPath())
+                .then()
+                .log().all()
+                .extract().response();
+
     }
 }

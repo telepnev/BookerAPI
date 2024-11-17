@@ -17,6 +17,7 @@ dependencies {
     implementation 'io.rest-assured:rest-assured:5.5.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.1'
     implementation 'org.assertj:assertj-core:3.26.3'
+
 }
 
 test {

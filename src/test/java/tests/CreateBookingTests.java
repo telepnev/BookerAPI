@@ -8,7 +8,6 @@ import core.models.CreatedBooking;
 import core.models.NewBooking;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +20,7 @@ public class CreateBookingTests {
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
 
+
     @BeforeEach
     public void setUp() {
         apiClient = new APIClient();
@@ -31,8 +31,12 @@ public class CreateBookingTests {
         newBooking.setLastname("Telepnev");
         newBooking.setTotalprice(900);
         newBooking.setDepositpaid(false);
-        newBooking.setBookingdates(new Bookingdates("2024-12-12", "2024-12-13"));
-        newBooking.setAdditionalneeds("bear");
+        newBooking.setBookingdates(Bookingdates.builder()
+                .checkin("2013-02-23")
+                .checkout("2013-02-23")
+                .build());
+        newBooking.setAdditionalneeds("Beer and fish");
+
     }
 
     @Test
