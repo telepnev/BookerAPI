@@ -7,6 +7,7 @@ import core.models.Booking;
 import core.models.Bookingdates;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import helpers.HelperBooking;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +22,7 @@ public class CreateAndGetBookingByIdTest {
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
+    private HelperBooking helperBooking;
     private int newBookingId;
 
     @BeforeEach
@@ -28,20 +30,7 @@ public class CreateAndGetBookingByIdTest {
         apiClient = new APIClient();
         objectMapper = new ObjectMapper();
 
-        Random rand = new Random();
-        int value = rand.nextInt(1000);
-
-        newBooking = NewBooking.builder()
-                .firstname("Evgen" + value)
-                .lastname("Telepnev" + value)
-                .totalprice(value)
-                .depositpaid(false)
-                .bookingdates(Bookingdates.builder()
-                        .checkin("2018-01-01")
-                        .checkout("2019-01-01")
-                        .build())
-                .additionalneeds("Beer and fish")
-                .build();
+        newBooking = helperBooking.createNewRandomBooking();
 
         String requestBody = objectMapper.writeValueAsString(newBooking);
         Response response = apiClient.createBooking(requestBody);
