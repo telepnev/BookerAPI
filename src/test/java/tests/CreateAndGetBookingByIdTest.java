@@ -58,7 +58,7 @@ public class CreateAndGetBookingByIdTest {
     @AfterEach
     public void tearDown() {
         apiClient.createToken("admin", "password123");
-        apiClient.deleteBooking(createdBooking.getBookingid());
+        apiClient.deleteBooking(newBookingId);
 
         assertThat(apiClient.getBookingById(createdBooking.getBookingid()).getStatusCode())
                 .isEqualTo(404);
