@@ -5,8 +5,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
 import core.models.CreatedBooking;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Story("Создание Бронирования")
 public class DeleteBookingByIdTest {
     private APIClient apiClient;
     private ObjectMapper objectMapper;
@@ -27,6 +30,10 @@ public class DeleteBookingByIdTest {
     }
 
     @Test
+    @Feature("Удаление Бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Удаление по рандомному ID Бронирования")
     public void testRandomDeleteBookingById() throws JsonProcessingException {
         List<Integer> listBookingId = new ArrayList<>();
         Random rand = new Random();

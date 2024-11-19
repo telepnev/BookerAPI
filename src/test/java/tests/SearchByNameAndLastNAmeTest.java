@@ -4,47 +4,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
-import core.models.Bookingdates;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import helpers.HelperBooking;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Story("Booking")
 public class SearchByNameAndLastNAmeTest {
 
     private APIClient apiClient;
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
+    private HelperBooking helperBooking;
     private int newBookingId;
 
     @BeforeEach
     public void setUp() throws JsonProcessingException {
         apiClient = new APIClient();
         objectMapper = new ObjectMapper();
-
-        Random rand = new Random();
-        int value = rand.nextInt(1000);
-
-        newBooking = NewBooking.builder()
-                .firstname("Evgen" + value)
-                .lastname("Telepnev" + value)
-                .totalprice(value)
-                .depositpaid(false)
-                .bookingdates(Bookingdates.builder()
-                        .checkin("2025-01-01")
-                        .checkout("2025-01-01")
-                        .build())
-                .additionalneeds("Beer and fish")
-                .build();
+        newBooking = newBooking = helperBooking.createNewRandomBooking();
 
         String requestBody = objectMapper.writeValueAsString(newBooking);
         Response response = apiClient.createBooking(requestBody);
@@ -55,6 +40,10 @@ public class SearchByNameAndLastNAmeTest {
     }
 
     @Test
+    @Feature("Поиск бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Поиск бронирования по ФИО")
     public void positiveSearchByNameAndLastNameTest() throws JsonProcessingException {
         Response response = apiClient.searchByNameAndLastName(newBooking.getFirstname(), newBooking.getLastname());
 
@@ -73,6 +62,10 @@ public class SearchByNameAndLastNAmeTest {
 
 
     @Test
+    @Feature("Поиск бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Поиск бронирования по не существующему ФИО")
     public void negativeSearchByNameAndLastNameTest() throws JsonProcessingException {
         Response response = apiClient.searchByNameAndLastName("newBookingOne.getFirstname()", "newBookingOne.getLastname()");
 
@@ -86,6 +79,10 @@ public class SearchByNameAndLastNAmeTest {
     }
 
     @Test
+    @Feature("Поиск бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Поиск бронирования с пустыми полями ФИО")
     public void negativeSearchWithOutNameLastNameTest() throws JsonProcessingException {
         Response response = apiClient.searchByNameAndLastName(" ", " ");
 

@@ -4,25 +4,26 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
 import core.models.Booking;
-import core.models.Bookingdates;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import helpers.HelperBooking;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Story("Создание Бронирования")
 public class CreateAndUpdateBookingTest {
     private APIClient apiClient;
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
     private NewBooking updateBooking;
-    private Random rand;
+    private HelperBooking helperBooking;
     private int newBookingId;
 
     @BeforeEach
@@ -31,20 +32,7 @@ public class CreateAndUpdateBookingTest {
         objectMapper = new ObjectMapper();
         apiClient.createToken("admin", "password123");
 
-        rand = new Random();
-        int value = rand.nextInt(1000);
-
-        newBooking = NewBooking.builder()
-                .firstname("Evgen" + value)
-                .lastname("Telepnev" + value)
-                .totalprice(value)
-                .depositpaid(false)
-                .bookingdates(Bookingdates.builder()
-                        .checkin("2024-11-28")
-                        .checkout("2024-11-30")
-                        .build())
-                .additionalneeds("Beer and fish")
-                .build();
+        newBooking = helperBooking.createNewRandomBooking();
 
         String requestBody = objectMapper.writeValueAsString(newBooking);
         Response response = apiClient.createBooking(requestBody);
@@ -55,21 +43,12 @@ public class CreateAndUpdateBookingTest {
     }
 
     @Test
+    @Feature("Обнавление бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Полное обнавление бронирования")
     public void positiveUpdateInfoBookingTest() throws JsonProcessingException {
-        rand = new Random();
-        int value = rand.nextInt(1000);
-
-        updateBooking = NewBooking.builder()
-                .firstname("Evgen" + value)
-                .lastname("Telepnev" + value)
-                .totalprice(value)
-                .depositpaid(false)
-                .bookingdates(Bookingdates.builder()
-                        .checkin("2025-01-01")
-                        .checkout("2025-01-01")
-                        .build())
-                .additionalneeds("Borsch")
-                .build();
+        updateBooking = helperBooking.createNewRandomBooking();
 
         Response responseBody = apiClient.updateBooking(newBookingId, updateBooking);
         String requestBody = responseBody.getBody().asString();
@@ -91,7 +70,7 @@ public class CreateAndUpdateBookingTest {
     @AfterEach
     public void tearDown() {
         apiClient.createToken("admin", "password123");
-        apiClient.deleteBooking(createdBooking.getBookingid());
+        apiClient.deleteBooking(newBookingId);
 
         assertThat(apiClient.getBookingById(createdBooking.getBookingid()).getStatusCode())
                 .isEqualTo(404);
