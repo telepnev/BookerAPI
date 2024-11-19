@@ -8,13 +8,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Random;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class Booking {
+public class NewBooking {
+
     @JsonProperty("firstname")
     private String firstname;
 
@@ -32,4 +35,5 @@ public class Booking {
 
     @JsonProperty("additionalneeds")
     private String additionalneeds;
+
 }

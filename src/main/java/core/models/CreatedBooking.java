@@ -14,22 +14,11 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
-public class Booking {
-    @JsonProperty("firstname")
-    private String firstname;
+public class CreatedBooking {
 
-    @JsonProperty("lastname")
-    private String lastname;
+    @JsonProperty("bookingid")
+    private int bookingid;
 
-    @JsonProperty("totalprice")
-    private Integer totalprice;
-
-    @JsonProperty("depositpaid")
-    private Boolean depositpaid;
-
-    @JsonProperty("bookingdates")
-    private Bookingdates bookingdates;
-
-    @JsonProperty("additionalneeds")
-    private String additionalneeds;
+    @JsonProperty("booking")
+    private Booking booking;
 }
