@@ -7,6 +7,8 @@ import core.clients.APIClient;
 import core.models.Bookingdates;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import helpers.HelperBooking;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.*;
 
@@ -15,33 +17,21 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Story("Booking")
 public class SearchByBookingdatesTests {
 
     private APIClient apiClient;
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
+    private HelperBooking helperBooking;
     private int newBookingId;
 
     @BeforeEach
     public void setUp() throws JsonProcessingException {
         apiClient = new APIClient();
         objectMapper = new ObjectMapper();
-
-        Random rand = new Random();
-        int value = rand.nextInt(1000);
-
-        newBooking = NewBooking.builder()
-                .firstname("Evgen" + value)
-                .lastname("Telepnev" + value)
-                .totalprice(value)
-                .depositpaid(false)
-                .bookingdates(Bookingdates.builder()
-                        .checkin("2025-01-01")
-                        .checkout("2025-01-01")
-                        .build())
-                .additionalneeds("Beer and fish")
-                .build();
+        newBooking = helperBooking.createNewRandomBooking();
 
         String requestBody = objectMapper.writeValueAsString(newBooking);
         Response response = apiClient.createBooking(requestBody);
@@ -51,9 +41,11 @@ public class SearchByBookingdatesTests {
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-
-
     @Test
+    @Feature("Поиск бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Поиск бронирования по датам")
     @Disabled("Кривая работа дат, позже переделать :) ")
     public void positiveSearchByBookingDatesTest() throws JsonProcessingException {
         Response response = apiClient.searchByBookingDates(newBooking.getBookingdates().getCheckin(),
@@ -75,7 +67,7 @@ public class SearchByBookingdatesTests {
     @AfterEach
     public void tearDown() {
         apiClient.createToken("admin", "password123");
-        apiClient.deleteBooking(createdBooking.getBookingid());
+        apiClient.deleteBooking(newBookingId);
 
         assertThat(apiClient.getBookingById(createdBooking.getBookingid()).getStatusCode())
                 .isEqualTo(404);

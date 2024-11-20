@@ -1,12 +1,14 @@
 package tests;
 
 import core.clients.APIClient;
+import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Story("Booking")
 public class HealthCheckTests {
     private APIClient apiClient;
 

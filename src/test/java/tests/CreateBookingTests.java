@@ -3,43 +3,40 @@ package tests;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
-import core.models.Bookingdates;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
+import helpers.HelperBooking;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@Story("Booking")
 public class CreateBookingTests {
     private APIClient apiClient;
     private ObjectMapper objectMapper;
     private CreatedBooking createdBooking;
     private NewBooking newBooking;
+    private HelperBooking helperBooking;
 
 
     @BeforeEach
     public void setUp() {
         apiClient = new APIClient();
         objectMapper = new ObjectMapper();
-
-        newBooking = new NewBooking();
-        newBooking.setFirstname("Evgen");
-        newBooking.setLastname("Telepnev");
-        newBooking.setTotalprice(900);
-        newBooking.setDepositpaid(false);
-        newBooking.setBookingdates(Bookingdates.builder()
-                .checkin("2013-02-23")
-                .checkout("2013-02-23")
-                .build());
-        newBooking.setAdditionalneeds("Beer and fish");
+        newBooking = helperBooking.createNewRandomBooking();
 
     }
 
     @Test
+    @Feature("Создание Бронирования")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Создание Бронирования")
     public void createBookingTest() throws JsonProcessingException {
         String requestBody = objectMapper.writeValueAsString(newBooking);
         Response response = apiClient.createBooking(requestBody);

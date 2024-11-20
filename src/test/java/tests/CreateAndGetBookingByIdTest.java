@@ -4,19 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import core.clients.APIClient;
 import core.models.Booking;
-import core.models.Bookingdates;
 import core.models.CreatedBooking;
 import core.models.NewBooking;
 import helpers.HelperBooking;
+import io.qameta.allure.*;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Story("Создание Бронирования")
 public class CreateAndGetBookingByIdTest {
     private APIClient apiClient;
     private ObjectMapper objectMapper;
@@ -41,6 +41,10 @@ public class CreateAndGetBookingByIdTest {
     }
 
     @Test
+    @Feature("Получение бронирования по ID")
+    @Owner("telepneves")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Получение бронирования по существующему ID")
     public void positiveGetBookingByIdTest() throws JsonProcessingException {
         Response responseBody = apiClient.getBookingById(newBookingId);
         String requestBody = responseBody.getBody().asString();
